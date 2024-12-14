@@ -94,7 +94,7 @@ print(type(buf))
 print([f"0x{byte:02x}" for byte in buf[-10:]])
 epd.display_4Gray(epd.getbuffer_4Gray(BMPImage))
 time.sleep(5)
-epd.display_4Gray(manual_process_image('pic/image.jpg'))
+epd.display_4Gray(epd.getbugger_4Gray(manual_process_image('pic/image.jpg')))
 time.sleep(5)
 
 epd.init()
