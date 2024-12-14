@@ -17,7 +17,7 @@ def process_image(input_jpg, output_path):
     # Map grayscale levels to 2-bit levels (0, 1, 2, 3)
     # Four levels: 0 -> 0, 64 -> 1, 128 -> 2, 192 -> 3
     img_array = np.array(img)
-    img_2bit = (img_array // 64).clip(0, 3) * 64
+    img_2bit = (img_array // 64).clip(0, 3) * 85
 
     # Convert back to an image
     img_2bit_image = Image.fromarray(img_2bit.astype("uint8"))
@@ -66,30 +66,6 @@ def manual_process_image(input_jpg, output_path):
     img_2bit.save(output_path, format="BMP")
 
     return output_path
-
-    # # Constants for width and height
-    # width, height = 400, 300
-    #
-    # # Calculate size of compressed data and allocate memory for the compressed data
-    # image_size = ((width % 8 == 0) and (width // 4) or (width // 4 + 1)) * height
-    #
-    # compressed_data = np.zeros(image_size, dtype=np.uint8)
-    #
-    # # Compress data into 4 pixels per byte
-    # ci = 0
-    # for i in range(0, n, 4):
-    #     com = data[i]  # Start with the first pixel
-    #     com = (com << 2) | data[i + 1]  # Shift by 2 bits and OR with the second pixel
-    #     com = (com << 2) | data[i + 2]  # Shift by 2 bits and OR with the third pixel
-    #     com = (com << 2) | data[i + 3]  # Shift by 2 bits and OR with the fourth pixel
-    #     #compressed_data[ci] = com  # Store the byte in the compressed data array
-    #     compressed_data[ci] = com
-    #     ci += 1  # Move to the next byte in compressed_data
-    #
-    # # Convert back to an image
-    # compressed_data = compressed_data.reshape(height, int(image_size / height))
-    #
-    # return compressed_data
 
 epd = epd4in2_V2.EPD()
 epd.init()
