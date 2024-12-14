@@ -28,21 +28,6 @@ def process_image(input_jpg, output_path):
     print(f"Saved 2-bit BMP to {output_path}")
     return output_path
 
-epd = epd4in2_V2.EPD()
-epd.init()
-epd.Clear()
-
-epd.Init_4Gray()
-
-BMPImage = Image.open(process_image('pic/image.jpg', 'pic/image.bmp'))
-epd.display_4Gray(epd.getbuffer_4Gray(BMPImage))
-time.sleep(4)
-
-epd.Clear()
-
-
-
-
 #### OLD METHOD, MANUAL BIT MANIPULATION, NEEDS TESTING ####
 def manual_process_image(input_jpg):
     # Open image
@@ -84,3 +69,23 @@ def manual_process_image(input_jpg):
 
     # compressed_data now contains the compressed image data
     print([f"0x{byte:02x}" for byte in compressed_data[:10]])
+    return compressed_data
+
+epd = epd4in2_V2.EPD()
+epd.init()
+epd.Clear()
+
+epd.Init_4Gray()
+
+BMPImage = Image.open(process_image('pic/image.jpg', 'pic/image.bmp'))
+epd.display_4Gray(epd.getbuffer_4Gray(BMPImage))
+time.sleep(10)
+
+epd.display_4Gray(manual_process_image('pic/image.jpg'))
+time.sleep(10)
+
+epd.init()
+epd.Clear()
+
+
+
