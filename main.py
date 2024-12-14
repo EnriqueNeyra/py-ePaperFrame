@@ -67,7 +67,15 @@ def manual_process_image(input_jpg):
         data[ci] = com
         ci += 1  # Move to the next byte in compressed_data
 
-    return data
+    print(len(data[:width*height]))
+    # Convert back to an image
+    img_2bit_image = Image.fromarray(data[:width*height].astype("uint8"))
+
+    # Save as BMP
+    img_2bit_image.save('pic/test.bmp', format="BMP")
+
+
+    return data[:width*height]
 
 epd = epd4in2_V2.EPD()
 epd.init()
@@ -82,7 +90,7 @@ print(type(buf))
 print([f"0x{byte:02x}" for byte in buf[-10:]])
 epd.display_4Gray(epd.getbuffer_4Gray(BMPImage))
 time.sleep(10)
-#epd.display_4Gray(manual_process_image('pic/image.jpg'))
+manual_process_image('pic/image.jpg')
 #time.sleep(10)
 
 epd.init()
