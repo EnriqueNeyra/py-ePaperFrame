@@ -8,7 +8,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 lib_path = os.path.join(script_dir, 'lib')
 pic_path = os.path.join(script_dir, 'pic')
 sys.path.append(lib_path)
-from waveshare_epd import epd4in2_V2
+#from waveshare_epd import epd4in2_V2
 
 def process_image(input_jpg, output_path):
     # Read the image
@@ -67,8 +67,6 @@ def manual_process_image(input_jpg):
         data[ci] = com
         ci += 1  # Move to the next byte in compressed_data
 
-    # compressed_data now contains the compressed image data
-    print([f"0x{byte:02x}" for byte in data[:-10]])
     return data
 
 epd = epd4in2_V2.EPD()
@@ -78,9 +76,12 @@ epd.Clear()
 epd.Init_4Gray()
 
 BMPImage = Image.open(process_image('pic/image.jpg', 'pic/image.bmp'))
+buf = epd.getbuffer_4Gray(BMPImage)
+print(len(buf))
+print(type(buf))
+print([f"0x{byte:02x}" for byte in buf[-10:]])
 epd.display_4Gray(epd.getbuffer_4Gray(BMPImage))
 time.sleep(10)
-#manual_process_image('pic/image.jpg')
 #epd.display_4Gray(manual_process_image('pic/image.jpg'))
 #time.sleep(10)
 
