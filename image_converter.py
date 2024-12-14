@@ -5,7 +5,7 @@ import numpy as np
 class ImageConverter:
 
     @staticmethod
-    def process_image(input_jpg, output_path):
+    def to_bmp_auto(input_jpg, output_path):
         # Read the image
         img = Image.open(input_jpg).convert("L")  # Convert to grayscale
 
