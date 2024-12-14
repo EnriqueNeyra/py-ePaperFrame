@@ -10,7 +10,6 @@ pic_path = os.path.join(script_dir, 'pic')
 sys.path.append(lib_path)
 from waveshare_epd import epd4in2_V2
 
-
 def process_image(input_jpg, output_path):
     # Read the image
     img = Image.open(input_jpg).convert("L") # Convert to grayscale
@@ -35,7 +34,7 @@ def manual_process_image(input_jpg):
 
     # Quantize to 2-bit grayscale (4 levels)
     n = img.width * img.height
-    data = np.array(img)
+    data = np.array(img).ravel()
 
     # Quantize pixel values to 4 levels
     for i in range(n):
@@ -55,7 +54,7 @@ def manual_process_image(input_jpg):
     # Calculate size of compressed data and allocate memory for the compressed data
     image_size = ((width % 8 == 0) and (width // 4) or (width // 4 + 1)) * height
 
-    compressed_data = np.zeros(image_size, dtype=np.uint8)
+    #compressed_data = np.zeros(image_size, dtype=np.uint8)
 
     # Compress data into 4 pixels per byte
     ci = 0
@@ -64,12 +63,13 @@ def manual_process_image(input_jpg):
         com = (com << 2) | data[i + 1]  # Shift by 2 bits and OR with the second pixel
         com = (com << 2) | data[i + 2]  # Shift by 2 bits and OR with the third pixel
         com = (com << 2) | data[i + 3]  # Shift by 2 bits and OR with the fourth pixel
-        compressed_data[ci] = com  # Store the byte in the compressed data array
+        #compressed_data[ci] = com  # Store the byte in the compressed data array
+        data[ci] = com
         ci += 1  # Move to the next byte in compressed_data
 
     # compressed_data now contains the compressed image data
-    print([f"0x{byte:02x}" for byte in compressed_data[:10]])
-    return compressed_data
+    print([f"0x{byte:02x}" for byte in data[:-10]])
+    return data
 
 epd = epd4in2_V2.EPD()
 epd.init()
@@ -80,12 +80,13 @@ epd.Init_4Gray()
 BMPImage = Image.open(process_image('pic/image.jpg', 'pic/image.bmp'))
 epd.display_4Gray(epd.getbuffer_4Gray(BMPImage))
 time.sleep(10)
-
-epd.display_4Gray(manual_process_image('pic/image.jpg'))
-time.sleep(10)
+#manual_process_image('pic/image.jpg')
+#epd.display_4Gray(manual_process_image('pic/image.jpg'))
+#time.sleep(10)
 
 epd.init()
 epd.Clear()
+epd.sleep()
 
 
 
