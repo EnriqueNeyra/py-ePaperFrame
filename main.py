@@ -54,7 +54,7 @@ def manual_process_image(input_jpg):
     # Calculate size of compressed data and allocate memory for the compressed data
     image_size = ((width % 8 == 0) and (width // 4) or (width // 4 + 1)) * height
 
-    #compressed_data = np.zeros(image_size, dtype=np.uint8)
+    compressed_data = np.zeros(image_size, dtype=np.uint8)
 
     # Compress data into 4 pixels per byte
     ci = 0
@@ -64,18 +64,17 @@ def manual_process_image(input_jpg):
         com = (com << 2) | data[i + 2]  # Shift by 2 bits and OR with the third pixel
         com = (com << 2) | data[i + 3]  # Shift by 2 bits and OR with the fourth pixel
         #compressed_data[ci] = com  # Store the byte in the compressed data array
-        data[ci] = com
+        compressed_data[ci] = com
         ci += 1  # Move to the next byte in compressed_data
 
-    print(len(data[:width*height]))
     # Convert back to an image
-    img_2bit_image = Image.fromarray(data[:width*height].astype("uint8"))
+    compressed_data.reshape(width, height)
+    img_2bit_image = Image.fromarray(compressed_data.astype("uint8"))
 
     # Save as BMP
     img_2bit_image.save('pic/test.bmp', format="BMP")
 
-
-    return data[:width*height]
+    return
 
 epd = epd4in2_V2.EPD()
 epd.init()
@@ -89,7 +88,7 @@ print(len(buf))
 print(type(buf))
 print([f"0x{byte:02x}" for byte in buf[-10:]])
 epd.display_4Gray(epd.getbuffer_4Gray(BMPImage))
-time.sleep(10)
+time.sleep(2)
 manual_process_image('pic/image.jpg')
 #time.sleep(10)
 
