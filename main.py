@@ -27,7 +27,6 @@ def process_image(input_jpg, output_path):
     print(f"Saved 2-bit BMP to {output_path}")
     return output_path
 
-#### OLD METHOD, MANUAL BIT MANIPULATION, NEEDS TESTING ####
 def manual_process_image(input_jpg, output_path):
     # Open image
     img = Image.open(input_jpg).convert("L")  # Convert to grayscale
@@ -49,13 +48,22 @@ def manual_process_image(input_jpg, output_path):
             array_flat[i] = 3  # White: 11
 
     # Reverse array flattening
-    img_2bpp = array_flat.reshape(array_orig.shape)
+    array_2bpp = array_flat.reshape(array_orig.shape)
 
-    # Convert back to an image
-    img_2bit_image = Image.fromarray(img_2bpp.astype("uint8"))
+    # Create a new image in "P" mode (palette-based)
+    img_2bit = Image.fromarray(array_2bpp, mode="P")
+
+    # Define a grayscale palette for 2-bit levels
+    palette = [
+        0, 0, 0,      # Black
+        85, 85, 85,   # Dark Gray
+        170, 170, 170,  # Light Gray
+        255, 255, 255  # White
+    ]
+    img_2bit.putpalette(palette)
 
     # Save as BMP
-    img_2bit_image.save('pic/test.bmp', format="BMP")
+    img_2bit.save(output_path, format="BMP")
 
     return output_path
 
