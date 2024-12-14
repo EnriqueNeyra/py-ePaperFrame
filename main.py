@@ -68,7 +68,7 @@ def manual_process_image(input_jpg):
         ci += 1  # Move to the next byte in compressed_data
 
     # Convert back to an image
-    compressed_data = compressed_data.reshape((width + 3) // 4, height)
+    compressed_data = compressed_data.reshape(height, int(image_size / height))
     img_2bit_image = Image.fromarray(compressed_data.astype("uint8"))
 
     # Save as BMP
