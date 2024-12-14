@@ -95,7 +95,7 @@ epd.display_4Gray(epd.getbuffer_4Gray(BMPImage1))
 time.sleep(5)
 BMPImage2 = Image.open(manual_process_image('pic/image.jpg', 'pic/test.bmp'))
 buf2 = epd.getbuffer_4Gray(BMPImage2)
-epd.display_4Gray(epd.getbuffer_4Gray()BMPImage2)
+epd.display_4Gray(epd.getbuffer_4Gray(BMPImage2))
 time.sleep(5)
 
 epd.init()
