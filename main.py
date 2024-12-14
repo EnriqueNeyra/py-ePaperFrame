@@ -3,6 +3,7 @@ import sys
 import time
 import numpy as np
 from PIL import Image
+from image_converter import ImageConverter
 # Automatically add the 'lib' directory relative to the script's location
 script_dir = os.path.dirname(os.path.abspath(__file__))
 lib_path = os.path.join(script_dir, 'lib')
@@ -24,7 +25,7 @@ def process_image(input_jpg, output_path):
 
     # Save as BMP
     img_2bit_image.save(output_path, format="BMP")
-    print(f"Saved 2-bit BMP to {output_path}")
+
     return output_path
 
 def manual_process_image(input_jpg, output_path):
@@ -73,13 +74,10 @@ epd.Clear()
 
 epd.Init_4Gray()
 
-BMPImage1 = Image.open(process_image('pic/image.jpg', 'pic/image.bmp'))
-buf1 = epd.getbuffer_4Gray(BMPImage1)
+bmp_image_path = ImageConverter.to_bmp('pic/image.jpg', 'pic/image.bmp')
+BMPImage1 = Image.open(bmp_image_path)
+buf2 = epd.getbuffer_4Gray(BMPImage1)
 epd.display_4Gray(epd.getbuffer_4Gray(BMPImage1))
-time.sleep(5)
-BMPImage2 = Image.open(manual_process_image('pic/image.jpg', 'pic/test.bmp'))
-buf2 = epd.getbuffer_4Gray(BMPImage2)
-epd.display_4Gray(epd.getbuffer_4Gray(BMPImage2))
 time.sleep(5)
 
 epd.init()
