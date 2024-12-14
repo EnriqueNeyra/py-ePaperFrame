@@ -32,45 +32,54 @@ def manual_process_image(input_jpg):
     # Open image
     img = Image.open(input_jpg).convert("L")  # Convert to grayscale
 
-    # Quantize to 2-bit grayscale (4 levels)
-    n = img.width * img.height
-    data = np.array(img).ravel()
+    array_orig = np.array(img)
+    array_flat = array_orig.ravel()
 
     # Quantize pixel values to 4 levels
+    n = img.width * img.height
     for i in range(n):
-        pixel_value = data[i]
+        pixel_value = array_flat[i]
         if pixel_value < 64:
-            data[i] = 0  # Black: 00
+            array_flat[i] = 0  # Black: 00
         elif pixel_value < 128:
-            data[i] = 1  # Dark Gray: 01
+            array_flat[i] = 1  # Dark Gray: 01
         elif pixel_value < 192:
-            data[i] = 2  # Light Gray: 10
+            array_flat[i] = 2  # Light Gray: 10
         else:
-            data[i] = 3  # White: 11
+            array_flat[i] = 3  # White: 11
 
-    # Constants for width and height
-    width, height = 400, 300
-
-    # Calculate size of compressed data and allocate memory for the compressed data
-    image_size = ((width % 8 == 0) and (width // 4) or (width // 4 + 1)) * height
-
-    compressed_data = np.zeros(image_size, dtype=np.uint8)
-
-    # Compress data into 4 pixels per byte
-    ci = 0
-    for i in range(0, n, 4):
-        com = data[i]  # Start with the first pixel
-        com = (com << 2) | data[i + 1]  # Shift by 2 bits and OR with the second pixel
-        com = (com << 2) | data[i + 2]  # Shift by 2 bits and OR with the third pixel
-        com = (com << 2) | data[i + 3]  # Shift by 2 bits and OR with the fourth pixel
-        #compressed_data[ci] = com  # Store the byte in the compressed data array
-        compressed_data[ci] = com
-        ci += 1  # Move to the next byte in compressed_data
+    # Reverse array flattening
+    img_2bpp = array_flat.reshape(array_orig.shape)
 
     # Convert back to an image
-    compressed_data = compressed_data.reshape(height, int(image_size / height))
+    img_2bit_image = Image.fromarray(img_2bpp.astype("uint8"))
 
-    return compressed_data
+    # Save as BMP
+    img_2bit_image.save('pic/test.bmp', format="BMP")
+
+    # # Constants for width and height
+    # width, height = 400, 300
+    #
+    # # Calculate size of compressed data and allocate memory for the compressed data
+    # image_size = ((width % 8 == 0) and (width // 4) or (width // 4 + 1)) * height
+    #
+    # compressed_data = np.zeros(image_size, dtype=np.uint8)
+    #
+    # # Compress data into 4 pixels per byte
+    # ci = 0
+    # for i in range(0, n, 4):
+    #     com = data[i]  # Start with the first pixel
+    #     com = (com << 2) | data[i + 1]  # Shift by 2 bits and OR with the second pixel
+    #     com = (com << 2) | data[i + 2]  # Shift by 2 bits and OR with the third pixel
+    #     com = (com << 2) | data[i + 3]  # Shift by 2 bits and OR with the fourth pixel
+    #     #compressed_data[ci] = com  # Store the byte in the compressed data array
+    #     compressed_data[ci] = com
+    #     ci += 1  # Move to the next byte in compressed_data
+    #
+    # # Convert back to an image
+    # compressed_data = compressed_data.reshape(height, int(image_size / height))
+    #
+    # return compressed_data
 
 epd = epd4in2_V2.EPD()
 epd.init()
