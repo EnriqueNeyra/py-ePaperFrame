@@ -28,7 +28,7 @@ def process_image(input_jpg, output_path):
     return output_path
 
 #### OLD METHOD, MANUAL BIT MANIPULATION, NEEDS TESTING ####
-def manual_process_image(input_jpg):
+def manual_process_image(input_jpg, output_path):
     # Open image
     img = Image.open(input_jpg).convert("L")  # Convert to grayscale
 
@@ -56,6 +56,8 @@ def manual_process_image(input_jpg):
 
     # Save as BMP
     img_2bit_image.save('pic/test.bmp', format="BMP")
+
+    return output_path
 
     # # Constants for width and height
     # width, height = 400, 300
@@ -87,11 +89,13 @@ epd.Clear()
 
 epd.Init_4Gray()
 
-BMPImage = Image.open(process_image('pic/image.jpg', 'pic/image.bmp'))
-buf1 = epd.getbuffer_4Gray(BMPImage)
-epd.display_4Gray(epd.getbuffer_4Gray(BMPImage))
+BMPImage1 = Image.open(process_image('pic/image.jpg', 'pic/image.bmp'))
+buf1 = epd.getbuffer_4Gray(BMPImage1)
+epd.display_4Gray(epd.getbuffer_4Gray(BMPImage1))
 time.sleep(5)
-epd.display_4Gray(epd.getbuffer_4Gray(manual_process_image('pic/image.jpg')))
+BMPImage2 = Image.open(manual_process_image('pic/image.jpg', 'pic/test.bmp'))
+buf2 = epd.getbuffer_4Gray(BMPImage2)
+epd.display_4Gray(epd.getbuffer_4Gray()BMPImage2)
 time.sleep(5)
 
 epd.init()
