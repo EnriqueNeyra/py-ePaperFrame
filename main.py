@@ -8,7 +8,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 lib_path = os.path.join(script_dir, 'lib')
 pic_path = os.path.join(script_dir, 'pic')
 sys.path.append(lib_path)
-#from waveshare_epd import epd4in2_V2
+from waveshare_epd import epd4in2_V2
 
 def process_image(input_jpg, output_path):
     # Read the image
