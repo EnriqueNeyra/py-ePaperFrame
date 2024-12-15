@@ -77,11 +77,11 @@ class ImageConverter:
             # Fit height and crop sides
             if original_aspect_ratio > target_aspect_ratio:
                 new_height = target_height
-                new_width = new_height * original_aspect_ratio
+                new_width = int(new_height * original_aspect_ratio)
             # Fit width and crop top/bottom
             else:
                 new_width = target_width
-                new_height = new_width / original_aspect_ratio
+                new_height = int(new_width / original_aspect_ratio)
 
             # Resize the image while maintaining aspect ratio
             resized_img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
