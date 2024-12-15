@@ -11,20 +11,27 @@ sys.path.append(bmp_path)
 class ImageConverter:
 
     def __init__(self):
-        self.random = 0
-        # self.image_files = [f for f in os.listdir('pic') if f.endswith(('.png', '.jpg', '.jpeg'))
+        self.input_directory = pic_path
+        self.output_directory = bmp_path
+        self.supported_formats = (".jpg", ".jpeg", ".png")
+
+        os.makedirs(self.output_directory, exist_ok=True)
+
+        self.image_files = [file for file in os.listdir('pic') if file.lower().endswith(self.supported_formats)]
 
     def process_images(self):
-        # Take all images found in pic
-        #
-        return
+        for file_name in self.image_files:
+            input_path = os.path.join(self.input_directory, file_name)
+            output_file_name = os.path.splitext(file_name)[0] + ".bmp"
+            output_path = os.path.join(self.output_directory, output_file_name)
 
-    def to_bmp(self, input_jpg, output_path):
-        # Resize image
-        self.resize_image(input_jpg)
+            self.resize_image(input_path)
+            self.to_bmp(input_path, output_path)
 
+    # Convert input image to bmp and save at the specified output path
+    def to_bmp(self, input_path, output_path):
         # Open image
-        img = Image.open(input_jpg).convert("L")  # Convert to grayscale
+        img = Image.open(input_path).convert("L")  # Convert to grayscale
 
         array_orig = np.array(img)
         array_flat = array_orig.ravel()
@@ -62,12 +69,13 @@ class ImageConverter:
 
         return output_path
 
-    def resize_image(self, path):
+    # Resize the image given by input_path and overwrite to the same path
+    def resize_image(self, input_path):
         # Screen target size dims
         target_width = 400
         target_height = 300
 
-        with Image.open(path) as img:
+        with Image.open(input_path) as img:
             # Original dimensions
             orig_width, orig_height = img.size
 
@@ -96,22 +104,22 @@ class ImageConverter:
             cropped_img = resized_img.crop((left, top, right, bottom))
 
             # Save the final image
-            cropped_img.save(path)
+            cropped_img.save(input_path)
 
-    @staticmethod
-    def to_bmp_auto(input_jpg, output_path):
-        # Read the image
-        img = Image.open(input_jpg).convert("L")  # Convert to grayscale
-
-        # Map grayscale levels to 2-bit levels (0, 1, 2, 3)
-        # Four levels: 0 -> 0, 64 -> 1, 128 -> 2, 192 -> 3
-        img_array = np.array(img)
-        img_2bit = (img_array // 64).clip(0, 3) * 85
-
-        # Convert back to an image
-        img_2bit_image = Image.fromarray(img_2bit.astype("uint8"))
-
-        # Save as BMP
-        img_2bit_image.save(output_path, format="BMP")
-
-        return output_path
+    # @staticmethod
+    # def to_bmp_auto(input_jpg, output_path):
+    #     # Read the image
+    #     img = Image.open(input_jpg).convert("L")  # Convert to grayscale
+    #
+    #     # Map grayscale levels to 2-bit levels (0, 1, 2, 3)
+    #     # Four levels: 0 -> 0, 64 -> 1, 128 -> 2, 192 -> 3
+    #     img_array = np.array(img)
+    #     img_2bit = (img_array // 64).clip(0, 3) * 85
+    #
+    #     # Convert back to an image
+    #     img_2bit_image = Image.fromarray(img_2bit.astype("uint8"))
+    #
+    #     # Save as BMP
+    #     img_2bit_image.save(output_path, format="BMP")
+    #
+    #     return output_path

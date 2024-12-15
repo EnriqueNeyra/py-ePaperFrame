@@ -14,14 +14,16 @@ def main():
     epd = epd4in2_V2.EPD()
     epd.init()
     epd.Clear()
-
     epd.Init_4Gray()
 
     converter = ImageConverter()
-    bmp_image_path = converter.to_bmp('pic/image.jpg', 'pic/image.bmp')
-    bmp_image = Image.open(bmp_image_path)
-    epd.display_4Gray(epd.getbuffer_4Gray(bmp_image))
-    time.sleep(5)
+    converter.process_images()
+    for filename in os.listdir(converter.output_directory):
+        filepath = os.path.join(converter.output_directory, filename)
+
+        with Image.open(filepath) as bmp_img:
+            epd.display_4Gray(epd.getbuffer_4Gray(bmp_img))
+            time.sleep(5)
 
     epd.init()
     epd.Clear()
