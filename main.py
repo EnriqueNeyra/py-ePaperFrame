@@ -8,13 +8,12 @@ from image_converter import ImageConverter
 script_dir = os.path.dirname(os.path.abspath(__file__))
 lib_path = os.path.join(script_dir, 'lib')
 sys.path.append(lib_path)
-from waveshare_epd import epd4in2_V2
+from waveshare_epd import epd5in65f
 
 def main():
-    epd = epd4in2_V2.EPD()
+    epd = epd5in65f.EPD()
     epd.init()
     epd.Clear()
-    epd.Init_4Gray()
 
     converter = ImageConverter()
     converter.process_images()
@@ -22,7 +21,7 @@ def main():
         filepath = os.path.join(converter.output_directory, filename)
 
         with Image.open(filepath) as bmp_img:
-            epd.display_4Gray(epd.getbuffer_4Gray(bmp_img))
+            epd.display(epd.getbuffer(bmp_img))
             time.sleep(5)
 
     epd.init()
