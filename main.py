@@ -17,16 +17,24 @@ def main():
 
     converter = ImageConverter()
     converter.process_images()
-    for filename in os.listdir(converter.output_directory):
-        filepath = os.path.join(converter.output_directory, filename)
 
-        with Image.open(filepath) as bmp_img:
-            epd.display(epd.getbuffer(bmp_img))
-            time.sleep(5)
+    # List of all image files in output directory
+    image_files = [f for f in os.listdir(converter.output_directory)]
 
-    epd.init()
-    epd.Clear()
-    epd.sleep()
+    while True:
+        for filename in image_files:
+            filepath = os.path.join(converter.output_directory, filename)
+
+            # Open and display the image
+            with Image.open(filepath) as bmp_img:
+                epd.display(epd.getbuffer(bmp_img))
+
+            # Sleep for 30 minutes (1800 seconds) between each image
+            time.sleep(1800)  # 30 minutes
+
+    # epd.init()
+    # epd.Clear()
+    # epd.sleep()
 
 if __name__ == "__main__":
     main()

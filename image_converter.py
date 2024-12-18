@@ -30,9 +30,6 @@ class ImageConverter:
 
     # Convert input image to bmp and save at the specified output path
     def to_bmp_seven_color(self, input_path, output_path):
-        # Open the image and convert it to RGB
-        img = Image.open(input_path).convert("RGB")
-
         # Define the 7 colors in the palette (RGB values)
         palette_colors = [
             (0, 0, 0),  # Black: 0x0
@@ -44,10 +41,21 @@ class ImageConverter:
             (255, 165, 0)  # Orange: 0x6
         ]
 
-        # Create a palette image
+        # Create the flat palette by expanding each color tuple into individual RGB values
+        flat_palette = []
+        for color in palette_colors:
+            flat_palette.extend(color)
+
+        # Pad the palette with zeros to make it 256 colors (each with 3 channels: RGB)
+        remaining_colors = 256 - len(palette_colors)
+        flat_palette.extend([0] * remaining_colors * 3)
+
+        # Create a palette image with the 7 colors
         palette_img = Image.new("P", (1, 1))
-        flattened_palette = sum(palette_colors, ()) + (0, 0, 0) * (256 - len(palette_colors))
-        palette_img.putpalette(flattened_palette[:768])
+        palette_img.putpalette(flat_palette)
+
+        # Open the image and convert it to RGB
+        img = Image.open(input_path).convert("RGB")
 
         # Quantize the input image using the palette
         img_quantized = img.quantize(palette=palette_img)
