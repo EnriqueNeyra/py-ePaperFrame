@@ -26,10 +26,39 @@ class ImageConverter:
             output_path = os.path.join(self.output_directory, output_file_name)
 
             self.resize_image(input_path)
-            self.to_bmp(input_path, output_path)
+            self.to_bmp_seven_color(input_path, output_path)
 
     # Convert input image to bmp and save at the specified output path
-    def to_bmp(self, input_path, output_path):
+    def to_bmp_seven_color(self, input_path, output_path):
+        # Open the image and convert it to RGB
+        img = Image.open(input_path).convert("RGB")
+
+        # Define the 7 colors in the palette (RGB values)
+        palette_colors = [
+            (0, 0, 0),  # Black: 0x0
+            (255, 255, 255),  # White: 0x1
+            (0, 255, 0),  # Green: 0x2
+            (0, 0, 255),  # Blue: 0x3
+            (255, 0, 0),  # Red: 0x4
+            (255, 255, 0),  # Yellow: 0x5
+            (255, 165, 0)  # Orange: 0x6
+        ]
+
+        # Create a palette image
+        palette_img = Image.new("P", (1, 1))
+        flattened_palette = sum(palette_colors, ()) + (0, 0, 0) * (256 - len(palette_colors))
+        palette_img.putpalette(flattened_palette[:768])
+
+        # Quantize the input image using the palette
+        img_quantized = img.quantize(palette=palette_img)
+
+        # Save the quantized image as BMP
+        img_quantized.save(output_path, format="BMP")
+
+        return output_path
+
+    # Convert input image to bmp and save at the specified output path
+    def to_bmp_four_gray(self, input_path, output_path):
         # Open image
         img = Image.open(input_path).convert("L")  # Convert to grayscale
 
@@ -72,8 +101,8 @@ class ImageConverter:
     # Resize the image given by input_path and overwrite to the same path
     def resize_image(self, input_path):
         # Screen target size dims
-        target_width = 400
-        target_height = 300
+        target_width = 600
+        target_height = 448
 
         with Image.open(input_path) as img:
             # Original dimensions
