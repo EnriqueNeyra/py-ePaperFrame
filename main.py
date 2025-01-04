@@ -27,10 +27,11 @@ def main():
 
             # Open and display the image
             with Image.open(filepath) as bmp_img:
+                bmp_img = bmp_img.rotate(180)
                 epd.display(epd.getbuffer(bmp_img))
 
             # Sleep for 30 minutes (1800 seconds) between each image
-            time.sleep(1800)  # 30 minutes
+            time.sleep(900)  # 30 minutes
 
     # epd.init()
     # epd.Clear()
