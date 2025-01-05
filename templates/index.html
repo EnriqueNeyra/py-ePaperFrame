@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload</title>
+    <style>
+        .thumbnail { width: 100px; height: 100px; object-fit: cover; }
+        .image-grid { display: flex; flex-wrap: wrap; }
+        .image-item { margin: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Upload Image</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    <h2>Existing Images</h2>
+    <div class="image-grid">
+        {% for image in images %}
+            <div class="image-item">
+                <a href="#" onclick="selectImage('{{ image }}')">
+                    <img src="/images/{{ image }}" class="thumbnail" alt="{{ image }}">
+                </a>
+                <p>{{ image }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        function selectImage(image) {
+            fetch(`/select-image?image=${image}`);
+        }
+    </script>
+</body>
+</html>
