@@ -36,9 +36,11 @@ class Display:
         return random_image
     
     def clear_display(self):
+        self.epd.init()
         self.epd.Clear()
     
     def display_image(self, img = None):
+        self.epd.init()
         
         if img:
             img_name = os.path.splitext(img)[0] + ".bmp"
@@ -51,7 +53,7 @@ class Display:
         
         else:
             images = self.fetch_image_files()
-            random_image = self.select_random_image(images)
+            random_imaage = self.select_random_image(images)
             self.last_selected_image = random_image
             
             # Open and display the image
@@ -63,7 +65,7 @@ class Display:
             current_time = time.time()
             elapsed_time = current_time - self.last_display_time
             
-            if elapsed_time >= 75:
+            if elapsed_time >= 900:
                 images = self.fetch_image_files()
                 random_image = self.select_random_image(images)
                 self.last_selected_image = random_image
