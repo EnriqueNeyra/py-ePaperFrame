@@ -1,6 +1,6 @@
 import os
 import sys
-from PIL import Image, ImageEnhance
+from PIL import Image, ImageEnhance, ImageOps
 import numpy as np
 script_dir = os.path.dirname(os.path.abspath(__file__))
 pic_path = os.path.join(script_dir, 'pic')
@@ -17,25 +17,22 @@ class ImageConverter:
         os.makedirs(self.output_directory, exist_ok=True)
 
         self.image_files = [file for file in os.listdir('pic') if 'modified' not in file]
-
-    def process_images(self):
-        for file_name in self.image_files:
-            original_img_path = os.path.join(self.input_directory, file_name)
-            new_img_name = os.path.splitext(file_name)[0] + "_modified"
-            modified_img_path = os.path.join(self.input_directory, new_img_name + os.path.splitext(file_name)[1])
-            output_bmp_path = os.path.join(self.output_directory, new_img_name + ".bmp")
-
-            self.resize_image(original_img_path, modified_img_path)
-            os.remove(original_img_path)
-            self.to_bmp_seven_color(modified_img_path, output_bmp_path)
+    
+    def process_image(self, file_name):
+        img_path = os.path.join(self.input_directory, file_name)
+        self.resize_image(img_path)
+        self.to_bmp_seven_color(img_path)
+            
 
     # Resize the image given by input_path and overwrite to the same path
-    def resize_image(self, input_path, output_path):
+    def resize_image(self, img_path):
         # Screen target size dims
         target_width = 600
         target_height = 448
 
-        with Image.open(input_path) as img:
+        with Image.open(img_path) as img:
+            img = ImageOps.exif_transpose(img)
+            
             enhancer = ImageEnhance.Contrast(img)
             img = enhancer.enhance(1.3)
             
@@ -67,10 +64,11 @@ class ImageConverter:
             cropped_img = resized_img.crop((left, top, right, bottom))
 
             # Save the final image
-            cropped_img.save(output_path)
+            cropped_img.save(img_path)
     
     # Convert input image to bmp and save at the specified output path
-    def to_bmp_seven_color(self, input_path, output_path):
+    def to_bmp_seven_color(self, img_path):
+        
         # Define the 7 colors in the palette (RGB values)
         palette_colors = [
             (0, 0, 0),  # Black: 0x0
@@ -96,53 +94,12 @@ class ImageConverter:
         palette_img.putpalette(flat_palette)
 
         # Open the image and convert it to RGB
-        img = Image.open(input_path).convert("RGB")
+        img = Image.open(img_path).convert("RGB")
 
         # Quantize the input image using the palette
         img_quantized = img.quantize(palette=palette_img)
 
         # Save the quantized image as BMP
-        img_quantized.save(output_path, format="BMP")
-
-        return output_path
-    
-    # Convert input image to bmp and save at the specified output path
-    def to_bmp_four_gray(self, input_path, output_path):
-        # Open image
-        img = Image.open(input_path).convert("L")  # Convert to grayscale
-
-        array_orig = np.array(img)
-        array_flat = array_orig.ravel()
-
-        # Quantize pixel values to 4 levels
-        n = img.width * img.height
-        for i in range(n):
-            pixel_value = array_flat[i]
-            if pixel_value < 64:
-                array_flat[i] = 0  # Black: 00
-            elif pixel_value < 128:
-                array_flat[i] = 1  # Dark Gray: 01
-            elif pixel_value < 192:
-                array_flat[i] = 2  # Light Gray: 10
-            else:
-                array_flat[i] = 3  # White: 11
-
-        # Reverse array flattening
-        array_2bpp = array_flat.reshape(array_orig.shape)
-
-        # Create a new image in "P" mode (palette-based)
-        img_2bit = Image.fromarray(array_2bpp, mode="P")
-
-        # Define a grayscale palette for 2-bit levels
-        palette = [
-            0, 0, 0,  # Black
-            85, 85, 85,  # Dark Gray
-            170, 170, 170,  # Light Gray
-            255, 255, 255  # White
-        ]
-        img_2bit.putpalette(palette)
-
-        # Save as BMP
-        img_2bit.save(output_path, format="BMP")
-
-        return output_path
+        file_name = os.path.splitext(os.path.basename(img_path))[0]
+        save_path = os.path.join(self.output_directory, f'{file_name}.bmp')
+        img_quantized.save(save_path, format="BMP")

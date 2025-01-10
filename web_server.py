@@ -1,39 +1,78 @@
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, flash
 import os
+import socket
 from werkzeug.utils import secure_filename
+from image_converter import ImageConverter
+from  display import Display
 script_dir = os.path.dirname(os.path.abspath(__file__))
 upload_path = lib_path = os.path.join(script_dir, 'pic')
+bmp_path = os.path.join(script_dir, 'bmp')
 
+display = Display()
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = upload_path  # Set path to your image folder
+app.config['UPLOAD_FOLDER'] = upload_path
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg'}
+app.secret_key = 'setsecretkey'
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+def get_pi_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+    finally:
+        s.close()
+    return ip
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    # Get the list of images in the upload folder
-    images = os.listdir(app.config['UPLOAD_FOLDER'])
-    images = [img for img in images if allowed_file(img)]  # Filter only allowed image types
+    if request.method == 'POST':
+        # Handle file upload
+        file = request.files['file']
+        if file:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            imageConverter = ImageConverter()
+            imageConverter.process_image(filename)
+        return redirect('/')
+
+    # List existing images
+    images = [img for img in os.listdir(app.config['UPLOAD_FOLDER'])]
     return render_template('index.html', images=images)
 
-@app.route('/upload', methods=['POST'])
-def upload_file():
-    if 'file' not in request.files:
-        return "No file part", 400
-    file = request.files['file']
-    if file.filename == '':
-        return "No selected file", 400
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return 'File uploaded successfully', 200
-    return 'Invalid file type', 400
+@app.route('/start-display')
+def start_display():
+    display.display_image()
+    return redirect('/')
 
+@app.route('/reset-display')
+def reset_display():
+    display.clear_display()
+    return redirect('/')
+
+@app.route('/flip-orientation')
+def flip_orientation():
+    # Flip orientation logic TO DO
+    return redirect('/')
+
+@app.route('/delete-image/<filename>', methods=['POST'])
+def delete_image(filename):
+    os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    os.remove(os.path.join(bmp_path, os.path.splitext(filename)[0] + ".bmp"))
+    return redirect('/')
+    
 @app.route('/images/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
+@app.route('/select-image')
+def select_image():
+    image_name = request.args.get('image')
+    display.display_image(image_name)
+    return '', 204  # No content response
+
 if __name__ == '__main__':
+    ip_address = get_pi_ip()
+    display.display_qrcode(ip_address)
     app.run(host='0.0.0.0', port=5000)
+    
+    
