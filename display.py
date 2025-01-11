@@ -47,6 +47,7 @@ class Display:
             self.last_selected_image = img_name
             bmp_pic_path = os.path.join(bmp_path, img_name)
             
+            # Open and display the image
             with Image.open(bmp_pic_path) as bmp_img:
                 bmp_img = bmp_img.rotate(180)
                 self.epd.display(self.epd.getbuffer(bmp_img))

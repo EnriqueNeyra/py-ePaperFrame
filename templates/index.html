@@ -250,7 +250,7 @@
 
             if (file && !allowedFileTypes.includes(file.type)) {
                 alert('Invalid file type. Please upload an image of type: PNG, JPG, JPEG, or GIF');
-                event.preventDefault(); // Stop the form submission
+                event.preventDefault();
             }
         });
         
@@ -267,7 +267,7 @@
             
             if (images.length === 0) {
                 alert("No images available. Please upload an image before starting the display.");
-                return; // Prevent the fetch call
+                return;
             }
             
             const confirmation = confirm("Start Display?");
