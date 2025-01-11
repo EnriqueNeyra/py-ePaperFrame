@@ -19,37 +19,33 @@ pip3 install -r requirements.txt
 deactivate
 echo "Packages installed."
 
-SCRIPT_PATH="$(pwd)/web_server.py"
+echo "Setting up ePaper Display python script service"
+SERVICE_NAME="epaper"
+PYTHON_SCRIPT="web_server.py"
+SERVICE_PATH="/etc/systemd/system/$SERVICE_NAME.service"
+CURRENT_USER=$(whoami)
 
-echo "Creating script to run on boot..."
-sudo sed -i '/exit 0/d' /etc/rc.local
-echo "source $(pwd)/venv/bin/activate && python3 $SCRIPT_PATH &" | sudo tee -a /etc/rc.local
-echo "exit 0" | sudo tee -a /etc/rc.local
-#SERVICE_NAME="epaper"
-#PYTHON_SCRIPT="web_server.py"
-#SERVICE_PATH="/etc/systemd/system/$SERVICE_NAME.service"
-#CURRENT_USER=$(whoami)
+echo $CURRENT_USER
 
+sudo bash -c "cat > $SERVICE_PATH" <<EOL
+[Unit]
+Description=My Python Script Service
+After=network.target
 
-#sudo bash -c "cat > $SERVICE_PATH" <<EOL
-#[Unit]
-#Description=My Python Script Service
-#After=network.target
+[Service]
+Type=simple
+WorkingDirectory=$(pwd)
+ExecStart=$(pwd)/venv/bin/python3 $(pwd)/$PYTHON_SCRIPT
+Restart=always
+User=$CURRENT_USER
 
-#[Service]
-#Type=simple
-#WorkingDirectory=$(pwd)
-#ExecStart=$(pwd)/venv/bin/python3 $(pwd)/$PYTHON_SCRIPT
-#Restart=always
-#User=$CURRENT_USER
+[Install]
+WantedBy=multi-user.target
+EOL
 
-#[Install]
-#WantedBy=multi-user.target
-#EOL
-
-#sudo systemctl daemon-reload
-#sudo systemctl enable $SERVICE_NAME
-#sudo systemctl start $SERVICE_NAME
+sudo systemctl daemon-reload
+sudo systemctl enable $SERVICE_NAME
+sudo systemctl start $SERVICE_NAME
 
 echo "Setup complete!"
 read -p "Reboot requried. Reboot now? (y/n): " REBOOT_CHOICE
