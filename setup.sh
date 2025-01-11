@@ -19,6 +19,8 @@ pip3 install -r requirements.txt
 deactivate
 echo "Packages installed."
 
+SCRIPT_PATH="$(pwd)/web_server.py"
+
 echo "Creating script to run on boot..."
 sudo sed -i '/exit 0/d' /etc/rc.local
 echo "source $(pwd)/venv/bin/activate && python3 $SCRIPT_PATH &" | sudo tee -a /etc/rc.local
