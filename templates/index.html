@@ -262,6 +262,14 @@
         }
         
         function startDisplay() {
+            const imageGrid = document.querySelector('.image-grid');
+            const images = imageGrid.querySelectorAll('img');
+            
+            if (images.length === 0) {
+                alert("No images available. Please upload an image before starting the display.");
+                return; // Prevent the fetch call
+            }
+            
             const confirmation = confirm("Start Display?");
             if (confirmation) {
                 fetch('/start-display');
