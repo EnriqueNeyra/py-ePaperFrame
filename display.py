@@ -50,6 +50,7 @@ class Display:
             with Image.open(bmp_pic_path) as bmp_img:
                 bmp_img = bmp_img.rotate(180)
                 self.epd.display(self.epd.getbuffer(bmp_img))
+                self.last_display_time = time.time()
         
         else:
             images = self.fetch_image_files()
@@ -60,6 +61,7 @@ class Display:
             with Image.open(os.path.join(bmp_path, random_image)) as bmp_img:
                 bmp_img = bmp_img.rotate(180)
                 self.epd.display(self.epd.getbuffer(bmp_img))
+                self.last_display_time = time.time()
                 
         while True:
             current_time = time.time()
@@ -74,7 +76,7 @@ class Display:
                 with Image.open(os.path.join(bmp_path, random_image)) as bmp_img:
                     bmp_img = bmp_img.rotate(180)
                     self.epd.display(self.epd.getbuffer(bmp_img))
-                    self.last_display_time = current_time
+                    self.last_display_time = time.time()
     
     def display_qrcode(self, ip_address):
         url = f"http://{ip_address}:5000"
