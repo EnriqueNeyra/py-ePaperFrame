@@ -14,8 +14,6 @@ class ImageConverter:
         self.input_directory = pic_path
         self.output_directory = bmp_path
 
-        os.makedirs(self.output_directory, exist_ok=True)
-
         self.image_files = [file for file in os.listdir('pic') if 'modified' not in file]
     
     def process_image(self, file_name):
