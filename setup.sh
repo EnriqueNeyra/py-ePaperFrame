@@ -25,7 +25,7 @@ echo "Setting up python script epaper service"
 SERVICE_NAME="epaper"
 PYTHON_SCRIPT="web_server.py"
 SERVICE_PATH="/etc/systemd/system/$SERVICE_NAME.service"
-CURRENT_USER=$(whoami)
+CURRENT_USER=${SUDO_USER:-$(whoami)}
 
 echo $CURRENT_USER
 
