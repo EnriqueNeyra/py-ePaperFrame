@@ -8,7 +8,7 @@ sudo sed -i 's/^dtparam=i2c_arm=.*/dtparam=i2c_arm=on/' /boot/config.txt
 sudo sed -i 's/^#dtparam=i2c_arm=.*/dtparam=i2c_arm=on/' /boot/config.txt
 sudo raspi-config nonint do_i2c 0
 
-echo "Installing required pythonh package(s)..."
+echo "Installing required python package(s)..."
 sudo apt-get install python3-qrcode
 sudo apt-get install python3-flask
 

@@ -53,7 +53,7 @@ class Display:
         
         else:
             images = self.fetch_image_files()
-            random_imaage = self.select_random_image(images)
+            random_image = self.select_random_image(images)
             self.last_selected_image = random_image
             
             # Open and display the image
