@@ -3,7 +3,7 @@
 ![IMG_1018](https://github.com/user-attachments/assets/1bd1e7ef-88f7-4934-b615-8c36d0d4ea9e)
 
 
-### The py-ePaperFrame is a digital picture frame that utilizes the **[Waveshare 5.65 7-Color ePaper Display](https://www.waveshare.com/5.65inch-e-paper-module-f.htm)** for a natural look. Use the integrated WebUI to easily upload 
+### The py-ePaperFrame is a digital picture frame that utilizes the **[Waveshare 5.65 7-Color ePaper Display](https://www.waveshare.com/5.65inch-e-paper-module-f.htm)** for a natural look. Use the integrated WebUI to easily upload images that the display will cycle through.
 
 ## Contents:
 [Required Hardware](#required-hardware-and-assembly)  
