@@ -31,7 +31,9 @@ Be sure to reboot the Pi after the setup completes!
 ## Web UI Usage
 After completing the setup and rebooting your Pi, a QR code will be displayed. Scan this QR code to access the Web UI. Alternatively, you can open any browser and go to **<Pi_IP_Address>.local:5000** to access the Web UI.
 
-![ePaper Controls](https://github.com/user-attachments/assets/281e7886-8e5c-4a5a-86be-4e4566778a08)
+<p align="center">
+<img src="https://github.com/user-attachments/assets/539b5ac4-83e3-44b7-b96b-35676409df7b" alt="Alt Text" width="300" >
+</p>
 
 ### Summary of Controls
 **Start Button**: This button starts the display, making it cycle through images you have uploaded in random order  
