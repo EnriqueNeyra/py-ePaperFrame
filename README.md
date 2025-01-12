@@ -2,7 +2,7 @@
 
 ![IMG_1018](https://github.com/user-attachments/assets/1bd1e7ef-88f7-4934-b615-8c36d0d4ea9e)
 
-### The pyePaper is a digital picture frame that utilizes the **[Waveshare 5.65 7-Color ePaper Display](https://www.waveshare.com/5.65inch-e-paper-module-f.htm)** for a natural look. Use the integrated WebUI to upload images that the display will automatically cycle through at a set time interval.
+### The pyePaper is a digital picture frame powered by Raspberry Pi that utilizes a [Waveshare 5.65 7-Color ePaper Display](https://www.waveshare.com/5.65inch-e-paper-module-f.htm) for a natural look. Use the integrated WebUI to upload images that the display will automatically cycle through at a set time interval.
 
 ## Contents:
 [Required Hardware](#required-hardware-and-assembly)  
