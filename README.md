@@ -8,6 +8,7 @@
 [Required Hardware](#required-hardware-and-assembly)  
 [Setup](#setup)  
 [WebUI Usage](#using-the-web-ui)
+[Video Demo](#video-demo)
 
 ## Required Hardware
 
@@ -40,6 +41,8 @@ After completing the setup and rebooting your Pi, a QR code will be displayed. S
 **Reset Button**: Use this to clear the display in the case of any image artifacts  
 **Image Upload**: Supported formats include JPG, JPEG, and PNG  
 **Removing Images**: Use the red 'X' in the upper left of an image thumbnail to permanently remove it
+
+## Video Demo
 
 
 
