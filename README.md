@@ -1,6 +1,7 @@
-# py-ePaperFrame - Dynamic ePaper Picture Frame Powered by Raspberry pi
+# py-ePaperFrame - Dynamic ePaper Picture Frame Powered by Raspberry Pi
 
-IMAGE HERE
+![IMG_1018](https://github.com/user-attachments/assets/1bd1e7ef-88f7-4934-b615-8c36d0d4ea9e)
+
 
 ### The py-ePaperFrame is a digital picture frame that utilizes the **[Waveshare 5.65 7-Color ePaper Display](https://www.waveshare.com/5.65inch-e-paper-module-f.htm)** for a natural look. Use the integrated WebUI to easily upload 
 
@@ -35,7 +36,8 @@ Be sure to reboot the Pi after the setup completes!
 ## Web UI Usage
 After completing the setup and rebooting your Pi, a QR code should display. Scan the QR code to access the Web UI. Alternatively, you can open any browser and go to **<Pi_IP_Address>.local:5000** to access the Web UI.
 
-IMAGE HERE
+![ePaper Controls](https://github.com/user-attachments/assets/281e7886-8e5c-4a5a-86be-4e4566778a08)
+
 
 ### Summary of Controls
 **Start Button**: This button starts the display, making it cycle through images you have uploaded in random order  
