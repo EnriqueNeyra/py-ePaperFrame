@@ -2,7 +2,7 @@
 
 ![IMG_1018](https://github.com/user-attachments/assets/1bd1e7ef-88f7-4934-b615-8c36d0d4ea9e)
 
-### The pyePaper is a digital picture frame that utilizes the **[Waveshare 5.65 7-Color ePaper Display](https://www.waveshare.com/5.65inch-e-paper-module-f.htm)** for a natural look. Use the integrated WebUI to upload images that the display will automatically cycle through.
+### The pyePaper is a digital picture frame that utilizes the **[Waveshare 5.65 7-Color ePaper Display](https://www.waveshare.com/5.65inch-e-paper-module-f.htm)** for a natural look. Use the integrated WebUI to upload images that the display will automatically cycle through at a set time interval.
 
 ## Contents:
 [Required Hardware](#required-hardware-and-assembly)  
@@ -43,6 +43,8 @@ After completing the setup and rebooting your Pi, a QR code will be displayed. S
 **Removing Images**: Use the red 'X' in the upper left of an image thumbnail to permanently remove it
 
 ## Video Demo
+Note: The video was shortened due to upload size constraints. Actual screen refresh time is ~30 seconds
+<video src="https://github.com/user-attachments/assets/684ee0bd-c2ec-477d-89fd-c4c316bff03f" />
 
 
 
